@@ -17,7 +17,7 @@ namespace UI
 			float _size;	
 
 		public:
-			Dot(Color const, Point const, float _size = 1.0);
+			Dot(Color const, Point const, float size = 1.0);
 
 			virtual void draw(IDrawContext *context) override;
 		};

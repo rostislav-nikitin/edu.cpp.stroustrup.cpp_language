@@ -11,18 +11,6 @@ namespace UI
 			_draw_context = new DrawContext(antialiasing);
 			_shapes_root = new CompositeShape();
 
-			if(!glfwInit())
-				exit(EXIT_FAILURE);
-			_window = glfwCreateWindow(1920, 1080, "Chapter 1: Simple GLFW example", NULL, NULL);
-
-			if(!_window)
-			{
-				glfwTerminate();
-					exit(EXIT_FAILURE);
-			}
-			glfwMakeContextCurrent(_window);
-
-			std::cout << "Windows initialized" << std::endl;
 		}
 
 		Point2i ApplicationWindow::get_top_left()
@@ -43,6 +31,14 @@ namespace UI
 		int ApplicationWindow::get_height() const
 		{
 			return _height;
+		}
+		void ApplicationWindow::set_width(int value)
+		{
+			_width = value;
+		}
+		void ApplicationWindow::set_height(int value)
+		{
+			_height = value;
 		}
 
 		CompositeShape *ApplicationWindow::get_shapes_root() const
@@ -108,9 +104,26 @@ namespace UI
 			}
 		}
 
+		void ApplicationWindow::create_window()
+		{
+			if(!glfwInit())
+				exit(EXIT_FAILURE);
+			_window = glfwCreateWindow(_width, _height, "Chapter 1: Simple GLFW example", NULL, NULL);
+
+			if(!_window)
+			{
+				glfwTerminate();
+					exit(EXIT_FAILURE);
+			}
+			glfwMakeContextCurrent(_window);
+			setup_antialiasing();
+
+			std::cout << "Windows initialized" << std::endl;
+		}
+
 		void ApplicationWindow::draw()
 		{
-			setup_antialiasing();
+			create_window();
 
 			while(!glfwWindowShouldClose(_window))
 			{

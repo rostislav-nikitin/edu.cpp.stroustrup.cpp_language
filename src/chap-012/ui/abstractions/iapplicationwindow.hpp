@@ -18,6 +18,8 @@ namespace UI
 			virtual void set_top_left(Point2i const) = 0;
 			virtual int get_width() const = 0;
 			virtual int get_height() const = 0;
+			virtual void set_width(int value) = 0;
+			virtual void set_height(int value) = 0;
 
 			virtual CompositeShape *get_shapes_root() const = 0;
 

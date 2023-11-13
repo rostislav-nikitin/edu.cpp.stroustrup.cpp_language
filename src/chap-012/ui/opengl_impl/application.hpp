@@ -5,6 +5,7 @@
 
 #include "../abstractions/iapplication.hpp"
 
+#include "applicationconfig.hpp"
 #include "applicationwindow.hpp"
 
 namespace UI
@@ -16,11 +17,14 @@ namespace UI
 		class Application : public IApplication
 		{
 		private:
+			ApplicationConfigBuilder _application_config_builder;
 			ApplicationWindow *_application_window;
 
 		public:
 			Application();
 			~Application();	
+
+			ApplicationConfigBuilder &configure();
 
 			IApplicationWindow *get_application_window() const override;
 

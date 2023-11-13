@@ -32,6 +32,7 @@ namespace UI
 			DrawContext *_draw_context;
 			GLFWwindow *_window;
 
+			void create_window();
 			void setup_antialiasing_on();
 			void setup_antialiasing_off();
 			void setup_antialiasing();
@@ -45,6 +46,8 @@ namespace UI
 
 			int get_width() const override;
 			int get_height() const override;
+			void set_width(int value) override;
+			void set_height(int value) override;
 			CompositeShape *get_shapes_root() const override;
 
 /*
