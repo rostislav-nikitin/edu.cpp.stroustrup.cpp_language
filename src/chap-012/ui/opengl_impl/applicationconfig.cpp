@@ -33,6 +33,16 @@ namespace UI
 			return *this;
 		}
 
+		ApplicationConfigBuilder &ApplicationConfigBuilder::append(std::vector<IShape *> shapes)
+		{
+			for(std::vector<IShape *>::iterator it = shapes.begin(); it != shapes.end(); ++it)
+			{
+				_app_config.shapes.push_back(*it);
+			}
+
+			return *this;
+		}
+
 
 		ApplicationConfigBuilder::ApplicationConfig ApplicationConfigBuilder::build()
 		{

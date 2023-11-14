@@ -30,6 +30,7 @@ namespace UI
 			ApplicationConfigBuilder &set_width(int value);
 			ApplicationConfigBuilder &set_height(int value);
 			ApplicationConfigBuilder &append(IShape *shape);
+			ApplicationConfigBuilder &append(std::vector<IShape *> shapes);
 
 
 			ApplicationConfig build();
