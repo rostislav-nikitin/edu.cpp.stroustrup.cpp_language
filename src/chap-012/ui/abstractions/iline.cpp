@@ -1,5 +1,7 @@
 #include "iline.hpp"
 
+#include <iostream>
+
 namespace UI
 {
 	namespace Abstractions
@@ -22,6 +24,36 @@ namespace UI
 		float ILine::get_size()
 		{
 			return _size;
+		}
+
+		bool ILine::intersects(IColorShape const *shape) const
+		{
+			std::cout << __PRETTY_FUNCTION__ << std::endl;
+			return shape->intersects(this);
+		}
+
+		bool ILine::intersects(ILine const *line) const
+		{
+			std::cout << __PRETTY_FUNCTION__ << std::endl;
+			return true;
+		}
+
+		bool ILine::intersects(ITriangle const *triangle) const
+		{
+			std::cout << __PRETTY_FUNCTION__ << std::endl;
+			return true;
+		}
+
+		bool ILine::intersects(IRectangle const *rectangle) const
+		{
+			std::cout << __PRETTY_FUNCTION__ << std::endl;
+			return true;
+		}
+
+		bool ILine::intersects(ICircle const *circle) const
+		{
+			std::cout << __PRETTY_FUNCTION__ << std::endl;
+			return true;
 		}
 	}
 }

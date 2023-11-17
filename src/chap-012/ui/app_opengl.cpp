@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "abstractions/ishape.hpp"
+#include "abstractions/icolorshape.hpp"
 #include "abstractions/compositeshape.hpp"
 
 #include "opengl_impl/application.hpp"
@@ -12,6 +12,7 @@
 #include "opengl_impl/grid.hpp"
 #include "opengl_impl/xycoordinates.hpp"
 
+void test_double_dispatch();
 std::vector<UI::Abstractions::IShape *> gen_shapes();
 
 int main(int argc, char **argv)
@@ -20,6 +21,8 @@ int main(int argc, char **argv)
 	using UI::Abstractions::Point;
 	using UI::OpenGL::Grid;
 	using UI::OpenGL::XYCoordinates;
+
+	test_double_dispatch();
 
 	UI::OpenGL::Application app;
 	app.configure()
@@ -32,6 +35,23 @@ int main(int argc, char **argv)
 	app.run();
 
 	return 0;
+}
+
+void test_double_dispatch()
+{
+	using UI::Abstractions::Color;
+	using UI::Abstractions::Point;
+	using UI::OpenGL::Line;
+	using UI::OpenGL::Triangle;
+	using UI::OpenGL::IColorShape;
+	
+	Line line(Color{1.f, 1.f, 1.f, 0.5f}, Point{-0.8f, 0.5f}, Point{-0.2f, 0.5f}, 1.f);
+	Triangle triangle(Color(0.f, 0.f, 1.f, 0.5f), Point(0.2f, 0.2f), Point(0.5f, 0.8f), Point(0.8f, 0.2f));
+
+	IColorShape &color_shape_line = line;
+	IColorShape &color_shape_triangle = triangle;
+
+	color_shape_line.intersects(&color_shape_triangle);
 }
 
 std::vector<UI::Abstractions::IShape *> gen_shapes()

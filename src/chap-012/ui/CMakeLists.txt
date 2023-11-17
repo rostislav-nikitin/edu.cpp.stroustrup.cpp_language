@@ -5,7 +5,7 @@ find_package(glfw3)
 
 #add_library(ui_system STATIC system/)
 
-add_library(ui_abstractions STATIC abstractions/color.cpp  abstractions/point.cpp abstractions/point2i.cpp abstractions/compositeshape.cpp abstractions/icolorshape.cpp abstractions/icircle.cpp abstractions/irectangle.cpp abstractions/itriangle.cpp abstractions/iline.cpp abstractions/idot.cpp abstractions/igrid.cpp abstractions/ixycoordinates.cpp)
+add_library(ui_abstractions STATIC abstractions/color.cpp  abstractions/point.cpp abstractions/point2i.cpp abstractions/ishape.cpp abstractions/compositeshape.cpp abstractions/icolorshape.cpp abstractions/icircle.cpp abstractions/irectangle.cpp abstractions/itriangle.cpp abstractions/iline.cpp abstractions/idot.cpp abstractions/igrid.cpp abstractions/ixycoordinates.cpp)
 
 add_library(ui_engine STATIC engine/collisiondetector.cpp)
 target_link_libraries(ui_engine ui_abstractions)
@@ -30,3 +30,7 @@ endif()
 
 add_executable(engine_tests_runner engine.tests/tests_runner.cpp)
 target_link_libraries(engine_tests_runner gtest gmock ui_abstractions ui_engine)
+
+add_executable(abstractions_tests_runner abstractions.tests/tests_runner.cpp)
+target_include_directories(abstractions_tests_runner PRIVATE ./)
+target_link_libraries(abstractions_tests_runner ui_abstractions gtest gmock)

@@ -17,5 +17,30 @@ namespace UI
 		{
 			_position = position;
 		}
+
+		bool IDot::intersects(IColorShape const *shape) const
+		{
+			throw std::runtime_error("Not Implemented");
+		}
+
+		bool IDot::intersects(ILine const *line) const
+		{
+			throw std::runtime_error("Not Implemented");
+		}
+
+		bool IDot::intersects(ITriangle const *triangle) const
+		{
+			throw std::runtime_error("Not Implemented");
+		}
+
+		bool IDot::intersects(IRectangle const *rectangle) const
+		{
+			throw std::runtime_error("Not Implemented");
+		}
+
+		bool IDot::intersects(ICircle const *circle) const
+		{
+			throw std::runtime_error("Not Implemented");
+		}
 	}
 }

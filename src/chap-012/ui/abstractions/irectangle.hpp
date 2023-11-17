@@ -9,6 +9,18 @@ namespace UI
 {
 	namespace Abstractions
 	{
+		class IRectangle;
+	}
+}
+
+#include "iline.hpp"
+#include "itriangle.hpp"
+#include "icircle.hpp"
+
+namespace UI
+{
+	namespace Abstractions
+	{
 		class IRectangle : public IColorShape
 		{
 		protected:
@@ -19,6 +31,11 @@ namespace UI
 		public:
 			IRectangle(Color color, Point position, float width, float height);
 
+			bool intersects(IColorShape const *shape) const override;
+			bool intersects(ILine const *line) const;
+			bool intersects(ITriangle const *triangle) const;
+			bool intersects(IRectangle const *rectangle) const;
+			bool intersects(ICircle const *circle) const;
 		};
 	}
 }
