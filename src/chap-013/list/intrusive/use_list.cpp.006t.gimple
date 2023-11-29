@@ -1,0 +1,113 @@
+int main ()
+{
+  const int D.49667;
+  int D.53967;
+
+  {
+    struct List list;
+
+    try
+      {
+        try
+          {
+            D.49667 = 10;
+            List<int>::List (&list, &D.49667);
+          }
+        finally
+          {
+            D.49667 = {CLOBBER(eol)};
+          }
+        List<int>::print_all (&list);
+        D.53967 = 0;
+        return D.53967;
+      }
+    finally
+      {
+        list = {CLOBBER(eol)};
+      }
+  }
+  D.53967 = 0;
+  return D.53967;
+}
+
+
+void List<int>::List (struct List * const this, const int & value)
+{
+  void * D.51838;
+  bool D.51839;
+
+  *this = {CLOBBER};
+  {
+    D.51838 = operator new (24);
+    D.51839 = 1;
+    try
+      {
+        List<int>::TLink::TLink (D.51838, 0B, 0B, value);
+        D.51839 = 0;
+        this->_head = D.51838;
+      }
+    catch
+      {
+        if (D.51839 != 0) goto <D.53973>; else goto <D.53974>;
+        <D.53973>:
+        operator delete (D.51838, 24);
+        goto <D.53975>;
+        <D.53974>:
+        <D.53975>:
+      }
+  }
+}
+
+
+void List<int>::TLink::TLink (struct TLink * const this, struct TLink * previous, struct TLink * next, const int & value)
+{
+  MEM[(struct __as_base  &)this] = {CLOBBER};
+  {
+    _1 = &this->D.51786;
+    List<int>::Link<List<int>::TLink>::Link (_1, previous, next);
+    _2 = *value;
+    this->_value = _2;
+  }
+}
+
+
+void List<int>::Link<List<int>::TLink>::Link (struct Link * const this, struct TLink * previous, struct TLink * next)
+{
+  *this = {CLOBBER};
+  {
+    this->_previous = previous;
+    this->_next = next;
+  }
+}
+
+
+void List<int>::print_all (struct List * const this)
+{
+  {
+    struct TLink * current;
+
+    current = this->_head;
+    goto <D.51870>;
+    <D.51869>:
+    _1 = &current->D.51786;
+    _2 = List<int>::Link<List<int>::TLink>::self (_1);
+    _3 = _2->_value;
+    _4 = std::basic_ostream<char>::operator<< (&cout, _3);
+    std::basic_ostream<char>::operator<< (_4, endl);
+    current = current->D.51786._next;
+    <D.51870>:
+    if (current != 0B) goto <D.51869>; else goto <D.51867>;
+    <D.51867>:
+  }
+}
+
+
+struct TLink & List<int>::Link<List<int>::TLink>::self (struct Link * const this)
+{
+  struct TLink & D.53979;
+
+  D.53979 = this;
+  return D.53979;
+}
+
+

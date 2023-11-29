@@ -1,0 +1,72 @@
+
+;; Function int main() (null)
+;; enabled by -tree-original
+
+
+{
+  struct List list;
+  int result;
+
+    struct List list;
+  <<cleanup_point <<< Unknown tree: expr_stmt
+    List<int>::List (&list, (const int &) &TARGET_EXPR <D.2852, 0>) >>>>>;
+    int result;
+  <<cleanup_point <<< Unknown tree: expr_stmt
+    (void) (result = List<int>::print_all (&list)) >>>>>;
+  return <retval> = result;
+}
+return <retval> = 0;
+
+
+;; Function List<T>::List(const T&) [with T = int] (null)
+;; enabled by -tree-original
+
+
+<<cleanup_point <<< Unknown tree: expr_stmt
+  *(struct List *) this = {CLOBBER} >>>>>;
+{
+  <<cleanup_point <<< Unknown tree: expr_stmt
+    (void) (((struct List *) this)->_head = TARGET_EXPR <D.2888, operator new (24)>;, TARGET_EXPR <D.2907, 1>;, List<int>::Link::Link ((struct Link *) D.2888, 0B, 0B, head);, D.2907 = 0;;, (struct Link *) D.2888;) >>>>>;
+}
+
+
+;; Function T List<T>::print_all() [with T = int] (null)
+;; enabled by -tree-original
+
+
+{
+  int result = 0;
+
+  <<cleanup_point   int result = 0;>>;
+  {
+    struct Link * current = ((struct List *) this)->_head;
+
+        struct Link * current = ((struct List *) this)->_head;
+    goto <D.2918>;
+    <D.2917>:;
+    <<cleanup_point <<< Unknown tree: expr_stmt
+      (void) (result = current->_value) >>>>>;
+    <<cleanup_point (void) (current = current->_next)>>;
+    <D.2918>:;
+    if (current != 0B) goto <D.2917>; else goto <D.2915>;
+    <D.2915>:;
+  }
+  return <retval> = result;
+}
+
+
+;; Function List<T>::Link::Link(List<T>::Link*, List<T>::Link*, const T&) [with T = int] (null)
+;; enabled by -tree-original
+
+
+<<cleanup_point <<< Unknown tree: expr_stmt
+  *(struct __as_base  &) this = {CLOBBER} >>>>>;
+{
+  <<cleanup_point <<< Unknown tree: expr_stmt
+    (void) (((struct Link *) this)->_previous = previous) >>>>>;
+  <<cleanup_point <<< Unknown tree: expr_stmt
+    (void) (((struct Link *) this)->_next = next) >>>>>;
+  <<cleanup_point <<< Unknown tree: expr_stmt
+    (void) (((struct Link *) this)->_value = (int) *value) >>>>>;
+}
+

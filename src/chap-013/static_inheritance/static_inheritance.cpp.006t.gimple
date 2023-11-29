@@ -1,0 +1,54 @@
+int main ()
+{
+  struct Derived D.2868;
+  int D.2875;
+
+  {
+    struct Derived d;
+
+    try
+      {
+        Derived::Derived (&d);
+        Base<Derived>::self (&d);
+        Base<Derived>::der (&d);
+        D.2875 = 0;
+        return D.2875;
+      }
+    finally
+      {
+        d = {CLOBBER(eol)};
+      }
+  }
+  D.2875 = 0;
+  return D.2875;
+}
+
+
+void Derived::Derived (struct Derived * const this)
+{
+  Base<Derived>::Base (this);
+}
+
+
+void Base<Derived>::Base (struct Base * const this)
+{
+
+}
+
+
+struct Derived & Base<Derived>::self (struct Base * const this)
+{
+  struct Derived & D.2880;
+
+  D.2880 = this;
+  return D.2880;
+}
+
+
+struct Derived Base<Derived>::der (struct Base * const this)
+{
+  _1 = Base<Derived>::self (this);
+  return <retval>;
+}
+
+

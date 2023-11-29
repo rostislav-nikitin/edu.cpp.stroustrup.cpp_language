@@ -1,0 +1,52 @@
+
+;; Function Derived::Derived() (null)
+;; enabled by -tree-original
+
+
+{
+  <<cleanup_point <<< Unknown tree: expr_stmt
+    Base<Derived>::Base ((struct Base *) this) >>>>>;
+}
+
+
+;; Function int main() (null)
+;; enabled by -tree-original
+
+
+{
+  struct Derived d;
+
+    struct Derived d;
+  <<cleanup_point <<< Unknown tree: expr_stmt
+    Derived::Derived (&d) >>>>>;
+  <<cleanup_point <<< Unknown tree: expr_stmt
+    (void) Base<Derived>::self ((struct Base *) &d) >>>>>;
+  <<cleanup_point <<< Unknown tree: expr_stmt
+    (void) TARGET_EXPR <D.2868, Base<Derived>::der ((struct Base *) &d)> >>>>>;
+  return <retval> = 0;
+}
+return <retval> = 0;
+
+
+;; Function Base<T>::Base() [with T = Derived] (null)
+;; enabled by -tree-original
+
+
+{
+  
+}
+
+
+;; Function T& Base<T>::self() [with T = Derived] (null)
+;; enabled by -tree-original
+
+
+return <retval> = (struct Derived &) this;
+
+
+;; Function T Base<T>::der() [with T = Derived] (null)
+;; enabled by -tree-original
+
+
+<<cleanup_point return <retval> = TARGET_EXPR <D.2874, *(const struct Derived &) Base<Derived>::self ((struct Base *) this)>>>;
+

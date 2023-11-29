@@ -1,0 +1,97 @@
+int main ()
+{
+  const int D.2852;
+  int D.2925;
+
+  {
+    struct List list;
+    int result;
+
+    try
+      {
+        try
+          {
+            D.2852 = 0;
+            List<int>::List (&list, &D.2852);
+          }
+        finally
+          {
+            D.2852 = {CLOBBER(eol)};
+          }
+        result = List<int>::print_all (&list);
+        D.2925 = result;
+        return D.2925;
+      }
+    finally
+      {
+        list = {CLOBBER(eol)};
+      }
+  }
+  D.2925 = 0;
+  return D.2925;
+}
+
+
+void List<int>::List (struct List * const this, const int & head)
+{
+  void * D.2909;
+  bool D.2910;
+
+  *this = {CLOBBER};
+  {
+    D.2909 = operator new (24);
+    D.2910 = 1;
+    try
+      {
+        List<int>::Link::Link (D.2909, 0B, 0B, head);
+        D.2910 = 0;
+        this->_head = D.2909;
+      }
+    catch
+      {
+        if (D.2910 != 0) goto <D.2931>; else goto <D.2932>;
+        <D.2931>:
+        operator delete (D.2909, 24);
+        goto <D.2933>;
+        <D.2932>:
+        <D.2933>:
+      }
+  }
+}
+
+
+void List<int>::Link::Link (struct Link * const this, struct Link * previous, struct Link * next, const int & value)
+{
+  MEM[(struct __as_base  &)this] = {CLOBBER};
+  {
+    this->_previous = previous;
+    this->_next = next;
+    _1 = *value;
+    this->_value = _1;
+  }
+}
+
+
+int List<int>::print_all (struct List * const this)
+{
+  int D.2935;
+  int result;
+
+  result = 0;
+  {
+    struct Link * current;
+
+    current = this->_head;
+    goto <D.2918>;
+    <D.2917>:
+    result = current->_value;
+    current = current->_next;
+    <D.2918>:
+    if (current != 0B) goto <D.2917>; else goto <D.2915>;
+    <D.2915>:
+  }
+  D.2935 = result;
+  return D.2935;
+}
+
+

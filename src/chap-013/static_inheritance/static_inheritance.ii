@@ -1,0 +1,46 @@
+# 0 "static_inheritance.cpp"
+# 0 "<built-in>"
+# 0 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 0 "<command-line>" 2
+# 1 "static_inheritance.cpp"
+
+
+template<class T>
+class Base
+{
+public:
+ Base()
+ {
+
+ }
+
+ T& self()
+ {
+  return reinterpret_cast<T&>(*this);
+ }
+
+ T der()
+ {
+  return self();
+ }
+};
+
+class Derived : public Base<Derived>
+{
+public:
+ Derived() : Base()
+ {
+
+ }
+};
+
+int main()
+{
+ Derived d;
+ d.self();
+ d.der();
+
+
+ return 0;
+}
