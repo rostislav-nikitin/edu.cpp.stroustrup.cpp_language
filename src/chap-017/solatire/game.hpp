@@ -29,7 +29,9 @@ namespace Solatire
 			Home<Card> _home;
 			Target<Card> _target;
 			Column<Card> _columns[COLUMNS_COUNT];
-	
+
+			void init();	
+
 			bool all_columns_full() const;
 			int free_count() const;
 			void show_home();
@@ -41,11 +43,22 @@ namespace Solatire
 			void draw_target();
 			void draw_columns();
 
+			class MoveResult
+			{
+				bool _ok;
+				std::string _error_message;
+			public:
+				MoveResult();
+				MoveResult(std::string const &error_message);
 
-			bool move_from_home_to_column(int column_number);
-			bool move_from_home_to_target();
-			bool move_from_column_to_target(int column_number);
-			bool move_from_column_to_column(int from_column_number, int to_column_number);
+				bool get_ok() const;
+				std::string get_error_message() const;
+			};
+
+			MoveResult move_from_home_to_column(int column_number);
+			MoveResult move_from_home_to_target();
+			MoveResult move_from_column_to_target(int column_number);
+			MoveResult move_from_column_to_column(int from_column_number, int to_column_number);
 
 		public:
 			Game();
@@ -54,6 +67,23 @@ namespace Solatire
 			void draw();
 			void run();
 		};
+
+		Game::MoveResult::MoveResult() : _ok(true), _error_message()
+		{
+		}
+
+		Game::MoveResult::MoveResult(std::string const &error_message) : _ok(false), _error_message(error_message)
+		{
+		}
+
+		bool Game::MoveResult::get_ok() const
+		{
+			return _ok;
+		}
+		std::string Game::MoveResult::get_error_message() const
+		{
+			return _error_message;
+		}
 
 		bool Game::all_columns_full() const
 		{
@@ -69,6 +99,15 @@ namespace Solatire
 		Game::Game()
 		{
 			std::srand(std::time(0));
+			init();
+		}
+		void Game::init()
+		{
+			_home.reset();
+			_target.reset();
+			for(int idx = 0; idx < COLUMNS_COUNT; ++idx)
+				_columns[idx].reset();
+
 
 			bool all_non_house_filled = all_columns_full();
 			std::vector<int> used_cards;
@@ -312,128 +351,130 @@ namespace Solatire
 			draw();
 			while(1)
 			{
-
-				std::cout << _target.get_counts_sum() << std::endl;
-
-				if(_target.get_counts_sum() == CARDS_COUNT)
+				try
 				{
-					std::cout << "Congratulations!" << std::endl << "You WIN!" << std::endl;
-					break;
-				}
+					//std::cout << _target.get_counts_sum() << std::endl;
 
-				char buffer[1024 + 1];
-				std::cin.getline(buffer, 1024);
-				buffer[1024] = '\0';
-
-				std::string command(buffer);
-
-				if(command == "Q" || command == "q")
-					break;
-
-				if(command == "H" || command == "h")
-				{
-					if(_home.size() > 0)
+					if(_target.get_counts_sum() == CARDS_COUNT)
 					{
-						Card card = _home.top();
-						_home.pop();
-						_home.push(card);
+						std::cout << "Congratulations!" << std::endl << "You WIN!" << std::endl;
+						break;
 					}
-				}
-				else
-				{
-					int arrow_pos = command.find("->");
-					if(arrow_pos != std::string::npos)
-					{
-						std::string left = command.substr(0, arrow_pos);
-						std::string right = command.substr(arrow_pos + 2);
 
-//						std::cout << left << "::" << right << std::endl;
-						if(left[0] == 'H' || left[0] == 'h')
+					std::cout << ">";
+					char buffer[1024 + 1];
+					std::cin.getline(buffer, 1024);
+					buffer[1024] = '\0';
+
+					std::string command(buffer);
+
+					if(command == "Q" || command == "q")
+						break;
+
+					if(command == "R" || command == "r")
+						init();
+
+					MoveResult move_result;
+
+					if(command == "H" || command == "h")
+					{
+						if(_home.size() > 0)
 						{
-							if(right[0] == 'C' || right[0] == 'c')
-							{
-								if(!move_from_home_to_column(atoi(right.substr(1).c_str())))
-								{
-									std::cout << "Incorrect move" << std::endl;
-								}
-							}
-							else if(right[0] == 'T' || right[0] == 't')
-							{
-								if(!move_from_home_to_target())
-								{
-									std::cout << "Incorrect move" << std::endl;
-								}
-								else
-								{
-									std::cout << "Added" << std::endl;
-								}
-							}
+							Card card = _home.top();
+							_home.pop();
+							_home.push(card);
 						}
-						else if(left[0] == 'C' || left[0] == 'c')
+					}
+					else
+					{
+						int arrow_pos = command.find("->");
+						if(arrow_pos != std::string::npos)
 						{
-							if(right[0] == 'T' || right[0] == 't')
+							std::string left = command.substr(0, arrow_pos);
+							std::string right = command.substr(arrow_pos + 2);
+
+//							std::cout << left << "::" << right << std::endl;
+							if(left[0] == 'H' || left[0] == 'h')
 							{
-								if(!move_from_column_to_target(atoi(left.substr(1).c_str())))
+								if(right[0] == 'C' || right[0] == 'c')
 								{
-									std::cout << "Incorrect move" << std::endl;
+									move_result = move_from_home_to_column(atoi(right.substr(1).c_str()));
+								}
+								else if(right[0] == 'T' || right[0] == 't')
+								{
+									move_result = move_from_home_to_target();
 								}
 							}
-							else if(right[0] == 'C' || right[0] == 'c')
+							else if(left[0] == 'C' || left[0] == 'c')
 							{
-								if(!move_from_column_to_column(atoi(left.substr(1).c_str()), atoi(right.substr(1).c_str())))
+								if(right[0] == 'T' || right[0] == 't')
 								{
-									std::cout << "Incorrect move" << std::endl;
+									move_result = move_from_column_to_target(atoi(left.substr(1).c_str()));
+								}
+								else if(right[0] == 'C' || right[0] == 'c')
+								{
+									move_result = move_from_column_to_column(atoi(left.substr(1).c_str()), atoi(right.substr(1).c_str()));
 								}
 							}
-						}
 						
+						}
+					}
+
+					draw();
+
+					if(!move_result.get_ok())
+					{
+						std::cout << "Error: " << move_result.get_error_message() << std::endl;
+					}
+					else
+					{
+						std::cout << "OK" << std::endl;
 					}
 				}
+				catch(...)
+				{
+					std::cout << "UNINDEFIED ERROR" << std::endl;
+				}
 
-				draw();
 				//std::cout << command;
 			}
 		}
 
 
-		bool Game::move_from_home_to_column(int column_number)
+		Game::MoveResult Game::move_from_home_to_column(int column_number)
 		{
 			//std::cout << column_number << std::endl;
 			int idx = column_number - 1;
 			// check rule
 			if(_home.size() == 0)
 			{
-				std::cout << "Home is empty";
-				return false;
+				return MoveResult("Home is empty.");
 			}
 			if((_columns[idx].visible_size() != 0) 
 				&& (_home.top().get_black() == _columns[idx].visible_top().get_black()))
 			{
-				std::cout << "Invalid color" << std::endl;
-				return false;
+				return MoveResult("Invalid color.");
 			}
 			if((_columns[idx].visible_size() != 0) 
 				&& ((static_cast<int>(_home.top().get_rank()) + 1) != (static_cast<int>(_columns[idx].visible_top().get_rank()))))
 			{
-				std::cout << "home rank=" << static_cast<int>(_home.top().get_rank()) << std::endl;
-				std::cout << "column rnak + 1=" << (static_cast<int>(_columns[idx].visible_top().get_rank()) + 1) << std::endl;
-				std::cout << "Invalid rank" << std::endl;
-				return false;
+				//std::cout << "home rank=" << static_cast<int>(_home.top().get_rank()) << std::endl;
+				//std::cout << "column rnak + 1=" << (static_cast<int>(_columns[idx].visible_top().get_rank()) + 1) << std::endl;
+				return MoveResult("Invalid rank.");
 			}
 
 			Card card = _home.top();
 			_home.pop();
 			_columns[idx].push_visible(card);
 
-			return true;
+			return MoveResult();
 		}
 
-		bool Game::move_from_home_to_target()
+		Game::MoveResult Game::move_from_home_to_target()
 		{
 			if(_home.size() == 0)
 			{
-				std::cout << "Home is empty";
-				return false;
+				return MoveResult("Home is empty.");
 			}
 
 			Card card = _home.top();
@@ -445,16 +486,15 @@ namespace Solatire
 			{
 				if(rank != Rank::Ace)
 				{
-					std::cout << "For empty target card rank should be Ace.";
-					return false;
+					std::cout << "ACE ERROR" << std::endl;
+					return MoveResult("For empty target card rank should be Ace.");
 				}
 			}
 			else
 			{
 				if ((static_cast<int>(rank) + 1) != (static_cast<int>(target.back().get_rank())))
 				{
-					std::cout << "Rank is wrong" << std::endl;
-					return false;
+					return MoveResult("Rank is wrong.");
 				}
 			}
 
@@ -462,16 +502,15 @@ namespace Solatire
 			_home.pop();
 
 
-			return true;
+			return MoveResult();
 		}
 
-		bool Game::move_from_column_to_target(int column_number)
+		Game::MoveResult Game::move_from_column_to_target(int column_number)
 		{
 			int idx = column_number - 1;
 			if(_columns[idx].visible_size() == 0)
 			{
-				std::cout << "Column is empty" << std::endl;
-				return false;
+				return MoveResult("Column is empty");
 			}
 
 			Card card = _columns[idx].visible_top();
@@ -483,16 +522,14 @@ namespace Solatire
 			{
 				if(rank != Rank::Ace)
 				{
-					std::cout << "For empty target card rank should be Ace.";
-					return false;
+					return MoveResult("For empty target card rank should be Ace.");
 				}
 			}
 			else
 			{
 				if ((static_cast<int>(rank) + 1) != (static_cast<int>(target.back().get_rank())))
 				{
-					std::cout << "Rank is wrong" << std::endl;
-					return false;
+					return MoveResult("Rank is wrong.");
 				}
 			}
 
@@ -505,32 +542,29 @@ namespace Solatire
 				_columns[idx].pop_invisible();
 			}
 
-			return true;
+			return MoveResult();
 		}
 
-		bool Game::move_from_column_to_column(int from_column_number, int to_column_number)
+		Game::MoveResult Game::move_from_column_to_column(int from_column_number, int to_column_number)
 		{
 			int from_idx = from_column_number - 1;
 			int to_idx = to_column_number - 1;
 
 			if(_columns[from_idx].visible_size() == 0)
 			{
-				std::cout << "Source column is empty." << std::endl;
-				return false;
+				return MoveResult("Source column is empty.");
 			}
 
 			if((_columns[to_idx].visible_size() != 0) 
 				&& (_columns[from_idx].visible_top().get_black() == _columns[to_idx].visible_top().get_black()))
 			{
-				std::cout << "Invalid Suit" << std::endl;
-				return false;
+				return MoveResult("Invalid Suit");
 			}
 			
 			if((_columns[to_idx].visible_size() != 0) 
 				&& ((static_cast<int>(_columns[from_idx].visible_top().get_rank()) + 1) != (static_cast<int>(_columns[to_idx].visible_top().get_rank()))))
 			{
-				std::cout << "Invalid rank" << std::endl;
-				return false;
+				return MoveResult("Invalid rank");
 			}
 
 			Card card = _columns[from_idx].visible_top();
@@ -544,7 +578,7 @@ namespace Solatire
 				_columns[from_idx].pop_invisible();
 			}
 
-			return true;
+			return MoveResult();;
 		}
 
 

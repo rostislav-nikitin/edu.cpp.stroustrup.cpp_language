@@ -27,6 +27,8 @@ namespace Solatire
 			void push_visible(typename std::deque<T>::value_type item);
 			void pop_visible();
 			typename std::deque<T>::value_type operator[](typename std::deque<T>::size_type index);
+
+			void reset();
 		};
 
 		template<class T>
@@ -80,6 +82,13 @@ namespace Solatire
 		typename std::deque<T>::value_type Column<T>::operator[](typename std::deque<T>::size_type index)
 		{
 			return _visible[index];
+		}
+
+		template<class T>
+		void Column<T>::reset()
+		{
+			_invisible = std::stack<T>();
+			_visible = std::deque<T>();
 		}
 	}
 }

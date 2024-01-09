@@ -18,6 +18,8 @@ namespace Solatire
 			typename std::queue<T>::size_type size() const;
 			void push(typename std::queue<T>::value_type item);
 			void pop();
+
+			void reset();
 		};
 
 		template<class T>
@@ -43,6 +45,11 @@ namespace Solatire
 		void Home<T>::pop()
 		{
 			_items.pop();
+		}
+		template<class T>
+		void Home<T>::reset()
+		{
+			_items = std::queue<T>();
 		}
 	}
 }

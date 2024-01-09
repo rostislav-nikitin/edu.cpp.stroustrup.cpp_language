@@ -15,6 +15,8 @@ namespace Solatire
 			typename std::map<int, std::deque<T>>::mapped_type &operator[](typename std::map<int, std::deque<T>>::key_type key);
 			int get_max_count() const;
 			int get_counts_sum() const;
+
+			void reset();
 		};
 
 		template<class T>
@@ -44,6 +46,12 @@ namespace Solatire
 				});
 
 			return result;
+		}
+
+		template<class T>
+		void Target<T>::reset()
+		{
+			_slots = std::map<int, std::deque<T>>();
 		}
 	}
 }
