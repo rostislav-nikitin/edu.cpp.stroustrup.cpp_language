@@ -1,0 +1,243 @@
+#include <ctime>
+#include <iostream>
+#include <stack>
+#include <vector>
+#include <set>
+#include <algorithm>
+
+enum class Suit
+{
+	Hearts = 0,
+	Diamonds,
+	Clubs,
+	Spades
+};
+
+
+std::string to_string(Suit suit)
+{
+	switch(suit)
+	{
+		case Suit::Hearts:
+			return "H";
+		case Suit::Diamonds:
+			return "D";
+		case Suit::Clubs:
+			return "C";
+		case Suit::Spades:
+			return "S";
+		default:
+			throw std::out_of_range("Suit is out of range.");
+	}
+}
+std::ostream& operator<<(std::ostream &stream, Suit suit)
+{
+	return (stream << to_string(suit));
+}
+
+enum class Rank
+{
+	Two = 2,
+	Three,
+	Four,
+	Five,
+	Six,
+	Seven,
+	Eight,
+	Nine,
+	Ten,
+	Jack,
+	Queen,
+	King,
+	Ace
+};
+
+std::string to_string(Rank rank)
+{
+	switch(rank)
+	{
+		case Rank::Two:
+			return "2";
+		case Rank::Three:
+			return "3";
+		case Rank::Four:
+			return "4";
+		case Rank::Five:
+			return "5";
+		case Rank::Six:
+			return "6";
+		case Rank::Seven:
+			return "7";
+		case Rank::Eight:
+			return "8";
+		case Rank::Nine:
+			return "9";
+		case Rank::Ten:
+			return "10";
+		case Rank::Jack:
+			return "J";
+		case Rank::Queen:
+			return "Q";
+		case Rank::King:
+			return "K";
+		case Rank::Ace:
+			return "A";
+		default:
+			throw std::out_of_range("Rank is out of range.");
+	}
+}
+
+std::ostream& operator<<(std::ostream &stream, Rank rank)
+{
+	return (stream << to_string(rank));
+}
+
+class Card
+{
+private:
+	int _number;
+public:
+	Card(int number);
+	int get_number() const;
+	Suit get_suit() const;
+	Rank get_rank() const;
+	
+};
+
+Card::Card(int number) : _number(number)
+{
+}
+
+int Card::get_number() const
+{
+	return _number;
+}
+
+Suit Card::get_suit() const
+{
+	return static_cast<Suit>(_number / 13);
+}
+
+Rank Card::get_rank() const
+{
+	return static_cast<Rank>(_number % 13 + 2);
+}
+
+class Game
+{
+	static const int CARDS_COUNT = 52;
+
+	static const int COLUMNS_COUNT = 7;
+	static const int ALL_COLUMNS_COUNT = COLUMNS_COUNT + 1;
+	static const int HOME_COLUMN_INDEX = 0;
+
+	std::stack<Card> _columns[ALL_COLUMNS_COUNT];
+	
+	bool all_columns_full() const;
+	int free_count() const;
+public:
+	Game();
+
+	void show_all();
+};
+
+bool Game::all_columns_full() const
+{
+	for(int idx = 0; idx < ALL_COLUMNS_COUNT; ++idx)
+	{
+		if(idx != HOME_COLUMN_INDEX && _columns[idx].size() < idx)
+			return false;
+	}
+
+	return true;
+}
+
+int Game::free_count() const
+{
+	int result = 0;
+
+	for(int idx = 0; idx < ALL_COLUMNS_COUNT; ++idx)
+	{
+		if(idx != HOME_COLUMN_INDEX)
+			result +=  idx - _columns[idx].size();
+	}
+
+	return result;
+}
+
+Game::Game()
+{
+	bool all_non_house_filled = all_columns_full();
+	std::vector<int> used_cards;
+
+	while(used_cards.size() < CARDS_COUNT)
+	{
+		//Find next card number
+		int n;
+		while(1)
+		{
+			n = std::rand() / (RAND_MAX / CARDS_COUNT);
+			if(std::find(used_cards.begin(), used_cards.end(), n) == used_cards.end())
+			{
+				used_cards.push_back(n);
+				break;
+			}
+		}
+
+		if(!all_non_house_filled)
+		{
+			//Fill column with card
+			for(int column_index = 0; column_index < ALL_COLUMNS_COUNT; ++column_index)
+			{
+				if((column_index != HOME_COLUMN_INDEX) && (_columns[column_index].size() < column_index))
+				{
+					_columns[column_index].push(n);
+					break;
+				}
+			}
+			
+			all_non_house_filled = all_columns_full();
+		}
+		else
+		{
+			// File home with a card
+			_columns[HOME_COLUMN_INDEX].push(n);
+		}
+	}
+}
+
+void Game::show_all()
+{
+	std::set<int> cards;
+	for(int idx = 0; idx < ALL_COLUMNS_COUNT; ++idx)
+	{
+		std::cout << idx << std::endl;
+		std::cout << "----------------------------------------" << std::endl;
+		while(_columns[idx].size())
+		{
+			Card card = _columns[idx].top();
+
+			//std::cout << card.get_number() << "::" << card.get_suit() << card.get_rank()  << ", ";
+			//cards.insert(to_string(card.get_suit()) + to_string(card.get_rank()));
+			cards.insert(card.get_number());
+			std::cout << card.get_suit() << card.get_rank()  << ", ";
+			_columns[idx].pop();
+		}
+
+		std::cout << std::endl << std::endl;
+	}
+
+	for(std::set<int>::iterator it = cards.begin(); it != cards.end(); ++it)
+	{
+		std::cout << *it << ", ";
+	}
+}
+
+int main()
+{
+	std::srand(std::time(0));
+	Game game;
+	game.show_all();
+
+	return EXIT_SUCCESS;
+}

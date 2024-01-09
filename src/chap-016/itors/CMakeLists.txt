@@ -19,3 +19,9 @@ add_executable(use use.cpp)
 
 add_executable(test_runner_vector test_runner_vector.cpp)
 target_link_libraries(test_runner_vector gtest gmock)
+
+add_executable(test_runner_vector_itors_by_value test_runner_vector_itors_by_value.cpp)
+target_link_libraries(test_runner_vector_itors_by_value gtest gmock)
+
+add_executable(test_runner_vector_itors_by_ref test_runner_vector_itors_by_ref.cpp)
+target_link_libraries(test_runner_vector_itors_by_ref gtest gmock)
