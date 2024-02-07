@@ -1,0 +1,80 @@
+//Safe Container
+template<class C>
+class SafeContainer
+{
+  C &_container;
+public:
+
+  // Container types
+  typedef typename C::value_type value_type;
+  typedef typename C::size_type size_type;
+  typedef typename C::difference_type difference_type;
+
+  typedef typename C::pointer pointer;
+  typedef typename C::const_pointer const_pointer;
+  
+  typedef typename C::reference reference;
+  typedef typename C::const_reference const_reference;
+
+  typedef SafeIterator<C> iterator;
+  typedef const SafeIterator<const C> const_iterator;
+
+  SafeContainer(C &container);
+
+  typename SafeContainer::iterator begin();
+  typename SafeContainer::iterator end();
+
+  bool empty() const;
+  typename SafeContainer::size_type size() const;
+  typename SafeContainer::size_type max_size() const;
+  typename SafeContainer::size_type capacity() const;
+  
+  void push_back(typename SafeContainer::const_reference value);
+  void push_back(typename SafeContainer::value_type&& value);
+};
+
+template<class C>
+SafeContainer<C>::SafeContainer(C &container) : _container(container)
+{
+}
+
+template<class C>
+typename SafeContainer<C>::iterator SafeContainer<C>::begin()
+{
+  return SafeIterator<C>(_container);
+}
+template<class C>
+typename SafeContainer<C>::iterator SafeContainer<C>::end()
+{
+  return SafeIterator<C>(_container, true);
+}
+
+template<class C>
+typename SafeContainer<C>::size_type SafeContainer<C>::size() const
+{
+  return _container.size();
+}
+
+template<class C>
+typename SafeContainer<C>::size_type SafeContainer<C>::max_size() const
+{
+  return _container.max_size();
+}
+
+template<class C>
+typename SafeContainer<C>::size_type SafeContainer<C>::capacity() const
+{
+  return _container.capacity();
+}
+
+template<class C>
+void SafeContainer<C>::push_back(typename SafeContainer::const_reference value)
+{
+  _container.push_back(value);
+}
+
+template<class C>
+void SafeContainer<C>::push_back(typename SafeContainer<C>::value_type&& value)
+{
+  _container.push_back(value);
+}

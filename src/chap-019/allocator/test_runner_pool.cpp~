@@ -1,0 +1,29 @@
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+
+#include "pool.hpp"
+
+TEST(TestSuitePoolGetBucketSize, WhenSizeIsZeroThenReturnsMinusOne)
+{
+  Pool pool;
+
+  
+}
+
+int main(int argc, char* argv[])
+{
+  ::testing::InitGoogleTest(&argc, argv);
+  /*  Allocator<int> alloc;
+  int *ptr = alloc.allocate(10);
+  *(ptr + 5) = 99;
+  
+  std::copy(ptr, ptr + 10, std::ostream_iterator<int>(std::cout));
+    
+  alloc.deallocate(ptr, 10);
+  */
+  return RUN_ALL_TESTS();
+}

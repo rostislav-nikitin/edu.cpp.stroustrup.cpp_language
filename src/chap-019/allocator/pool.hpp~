@@ -1,0 +1,88 @@
+#ifndef POOL_HPP
+#define POOL_HPP
+
+//#include <pair>
+
+class Pool
+{
+  const static int HASH_EXCEEDED_LIMITS = -1;
+  const static size_t BUCKETS_SIZE = 20;
+  
+  void* _buckets[BUCKETS_SIZE];
+  
+  struct ILink
+  {
+    ILink *next;
+    ILink *previous;
+  };
+
+
+  size_t get_bucket_size(size_t item_size);
+  int get_hash(size_t size);
+  int get_bucket_index(size_t required_size);
+
+public:
+  Pool();
+  ~Pool();
+  
+  void* allocate(size_t size);
+  void deallocate(void* ptr, size_t size);
+};
+
+Pool::Pool()
+{
+}
+
+Pool::~Pool()
+{
+}
+
+
+size_t Pool::get_bucket_size(size_t item_size)
+{
+  int result = 1;
+  
+  while(result < item_size)
+    result <<= 1;
+
+  return result;
+}
+
+int Pool::get_hash(size_t size)
+{
+  int result = -1;
+  
+  while(size)
+  {
+    size >>= 1;
+    result++;
+  }
+
+  return result;
+}
+
+int Pool::get_bucket_index(size_t required_size)
+{
+  // Calculate mem amount (req + size of link)
+  //  size_t total_item_size = required_size + sizeof(ILink);
+  // Calculate nearest to 2^n amount
+  size_t bucket_size = get_bucket_size(required_size);
+  int bucket_index = get_hash(bucket_size);
+
+  if(bucket_index < 0 || bucket_index >= BUCKETS_SIZE)
+    throw std::out_of_range("Can not find appropriate bucket. Size is out of range.");
+
+  return bucket_index;
+}
+
+
+void* Pool::allocate(size_t size)
+{
+  return nullptr;
+}
+
+void Pool::deallocate(void* ptr, size_t size)
+{
+}
+
+#endif

@@ -1,0 +1,18 @@
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+
+#include "allocator.hpp"
+
+int main(int argc, char* argv[])
+{
+  Allocator<int> alloc;
+  int *ptr = alloc.allocate(10);
+  *(ptr + 5) = 99;
+  
+  std::copy(ptr, ptr + 10, std::ostream_iterator<int>(std::cout));
+    
+  alloc.deallocate(ptr, 10);
+  
+  return EXIT_SUCCESS;
+}
