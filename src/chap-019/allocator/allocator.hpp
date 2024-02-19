@@ -48,6 +48,8 @@ public:
 
   void construct(pointer starts_at, const_reference value);
   void deconstruct(pointer starts_at);
+
+  Pool& get_pool();
 };
 
 template<class T>
@@ -117,5 +119,9 @@ void Allocator<T>::deconstruct(pointer starts_at)
   std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
 
-
+template<class T>
+Pool& Allocator<T>::get_pool()
+{
+	return Allocator<T>::_pool;
+}
 #endif

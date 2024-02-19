@@ -21,3 +21,6 @@ target_link_libraries(test_runner_allocator gtest gmock)
 
 add_executable(test_runner_pool test_runner_pool.cpp)
 target_link_libraries(test_runner_pool gtest gmock)
+
+add_executable(test_runner_vector test_runner_vector.cpp)
+target_link_libraries(test_runner_vector gtest gmock)
