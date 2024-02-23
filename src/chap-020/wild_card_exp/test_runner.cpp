@@ -29,6 +29,7 @@ INSTANTIATE_TEST_SUITE_P(WhenValidThenPosIsNotNPOS,
 						 WildCardExprPositiveCaseFixture,
 						 ::testing::Values(
 										   std::make_pair("Test string", "Test string"),
+										   std::make_pair("Test string", "First Test string"),
 										   std::make_pair("T?s? ?t?in?", "Test string"),
 										   std::make_pair("*string", "Test string"),
 										   std::make_pair("Test*", "Test string"),
