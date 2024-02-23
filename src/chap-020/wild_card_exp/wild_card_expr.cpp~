@@ -1,0 +1,7 @@
+#include "wild_card_exp.hpp"
+
+
+bool WildCardExp::match(std::string instr)
+{
+	return true;
+}

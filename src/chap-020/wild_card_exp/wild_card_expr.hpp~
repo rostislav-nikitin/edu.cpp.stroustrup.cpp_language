@@ -1,0 +1,15 @@
+#include <string>
+
+class WildCardExpr
+{
+  enum class WildCardExprState
+  {
+	Normal
+  };
+
+  WildCardExprState _state;
+  size_t _current;
+  
+public:
+  bool match(std::string instr);
+};

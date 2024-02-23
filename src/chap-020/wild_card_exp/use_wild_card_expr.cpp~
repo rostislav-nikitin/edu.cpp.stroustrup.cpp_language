@@ -1,0 +1,12 @@
+#include <iostream>
+
+#include "wild_card_expr.hpp"
+
+int main()
+{
+	WildCardExpr wc_expr;
+
+	std::cout << "Mathed: \t" << wc_expr.match("[Tt]est") << std::endl;
+	
+	return EXIT_SUCCESS;
+}
