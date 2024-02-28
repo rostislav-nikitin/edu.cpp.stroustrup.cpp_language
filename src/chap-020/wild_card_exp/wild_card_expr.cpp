@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+
 WildCardExpr::WildCardExpr(std::string expr_str) : _expr_str(expr_str)
 {
 }
@@ -25,9 +26,9 @@ size_t WildCardExpr::find(std::string const &in_str, size_t in_pos)
 		char expr_current_char = _expr_str[expr_pos];
 		std::vector<char> &modifiers = _state_modifying_characters[state];
   		
-		std::vector<char>::const_iterator expr_current_modifier = std::find(modifiers.begin(), modifiers.end(), expr_current_char);
+		std::vector<char>::const_iterator expr_current_modifier = 
+			std::find(modifiers.begin(), modifiers.end(), expr_current_char);
 		
-	
 		if(state == WildCardExprState::Normal)
 		{
 			//std::cout << "NOR" << std::endl;
@@ -95,6 +96,11 @@ size_t WildCardExpr::find(std::string const &in_str, size_t in_pos)
 				{
 					//std::cout << "Asterik!!!" << std::endl;
 					alt_state_any_chars = true;
+					if(first_found_pos == std::string::npos)
+					{
+						first_found_pos = in_pos;
+					}
+
 				}
 			}		
 					
@@ -136,12 +142,27 @@ size_t WildCardExpr::find(std::string const &in_str, size_t in_pos)
 		//		std::cout << "TT" << std::endl;
 		//std::cout << expr_substr << "::" << in_pos << std::endl;
 		size_t substr_pos = in_str.find(expr_substr, in_pos);
-		if(substr_pos == std::string::npos)
-			return std::string::npos;
+		//std::cout << in_str << "::" << expr_substr << "::" << substr_pos << std::endl;
 
-		if(first_found_pos == std::string::npos)
-			first_found_pos = substr_pos;
+		if(substr_pos != std::string::npos && ((substr_pos == in_pos) || alt_state_any_chars))
+		{
+			in_pos = substr_pos + expr_substr.size();
+
+			if(first_found_pos == std::string::npos)
+				first_found_pos = substr_pos;
+		}
+		else
+		{
+			return std::string::npos;
+		}
 	}				
-			
-	return first_found_pos;
+
+	if(in_pos == in_str.size() || ((expr_substr.size() == 0) && alt_state_any_chars))
+	{
+		//std::cout << expr_substr << "::" << in_str << std::endl;
+		return first_found_pos;
+	}
+	else
+		return std::string::npos;
+	}
 }
